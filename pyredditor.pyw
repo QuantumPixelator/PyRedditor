@@ -4,7 +4,7 @@ import requests
 import os
 from PySide6.QtWidgets import (QApplication, QMainWindow, QVBoxLayout, QLabel, QLineEdit, QSlider, QComboBox, QPushButton, QWidget, QHBoxLayout)
 from PySide6.QtCore import Qt, QThread, Signal
-from PySide6.QtGui import QPalette, QColor, QFont
+from PySide6.QtGui import QPalette, QColor, QFont, QIcon
 
 class RedditDownloader(QThread):
     progress_signal = Signal(int)
@@ -50,6 +50,7 @@ class RedditMediaDownloader(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("PyRedditor")
+        self.setWindowIcon(QIcon("icon.png"))
         self.resize(320, 290)
 
         palette = QPalette()
