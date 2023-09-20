@@ -2,8 +2,7 @@ import praw
 import json
 import requests
 import os
-from PySide6.QtWidgets import (QApplication, QMainWindow, QVBoxLayout, QLabel, QLineEdit,
-                               QSlider, QComboBox, QPushButton, QWidget, QHBoxLayout)
+from PySide6.QtWidgets import (QApplication, QMainWindow, QVBoxLayout, QLabel, QLineEdit, QSlider, QComboBox, QPushButton, QWidget, QHBoxLayout)
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QPalette, QColor, QFont
 
@@ -88,6 +87,11 @@ class RedditMediaDownloader(QMainWindow):
                 color: #FF4500;
                 border: 2px solid #FF4500;
             }
+            QSlider::handle:horizontal {
+                height: 10px;
+                background: #FF4500;
+                margin: 0 -4px; /* expand outside the groove */
+                }
         """)
 
         main_layout = QVBoxLayout()
