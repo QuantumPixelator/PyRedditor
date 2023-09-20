@@ -93,9 +93,17 @@ class RedditMediaDownloader(QMainWindow):
         main_layout = QVBoxLayout()
 
         self.header_label = QLabel("PyRedditor", self)
-        self.header_label.setFont(QFont("Tahoma", 18, QFont.Bold))
+        self.header_label.setFont(QFont("COurier New", 20, QFont.Bold))
         self.header_label.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(self.header_label, alignment=Qt.AlignCenter)
+        
+        self.mini_label = QLabel("Reddit Image Scraper\n\n", self)
+        font = QFont("Verdana",7)
+        font.setItalic(True)
+        self.mini_label.setFont(font)
+        self.mini_label.setAlignment(Qt.AlignCenter)
+        main_layout.addWidget(self.mini_label, alignment=Qt.AlignCenter)
+
 
         self.subreddit_label = QLabel("Subreddit To Scan:")
         main_layout.addWidget(self.subreddit_label)
@@ -176,11 +184,19 @@ class RedditMediaDownloader(QMainWindow):
         self.stop_button.setStyleSheet("background-color: #FF4500; color: white;")
         self.start_button.setEnabled(False)
         self.stop_button.setEnabled(True)
+        self.reddit_thread.finished.connect(self.reset_ui)
 
     def stop_download(self):
         if self.reddit_thread:
             self.reddit_thread.stop()
 
+        self.downloaded_label.setStyleSheet("color: black; font-weight: normal;")
+        self.start_button.setStyleSheet("background-color: #FF4500; color: white;")
+        self.stop_button.setStyleSheet("background-color: gray; color: black;")
+        self.start_button.setEnabled(True)
+        self.stop_button.setEnabled(False)
+
+    def reset_ui(self):
         self.downloaded_label.setStyleSheet("color: black; font-weight: normal;")
         self.start_button.setStyleSheet("background-color: #FF4500; color: white;")
         self.stop_button.setStyleSheet("background-color: gray; color: black;")
