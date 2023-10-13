@@ -2,7 +2,13 @@ venv/
 __pycache__/
 images/
 credentials.json
+<<<<<<< HEAD
 sublist.txt
 test.pyw
 test.py
 subs.txt
+=======
+test.pyw
+sublist.txt
+*.txt
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5

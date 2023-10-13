@@ -2,13 +2,23 @@ import praw
 import json
 import requests
 import os
+<<<<<<< HEAD
 from PySide6.QtWidgets import (QApplication, QMainWindow, QVBoxLayout, QLabel, QSlider, QComboBox, QPushButton, QWidget, QHBoxLayout, QFileDialog, QMessageBox)
+=======
+from PySide6.QtWidgets import (QApplication, QMainWindow, QVBoxLayout, QLabel, QLineEdit, QSlider, QComboBox, QPushButton, QWidget, QHBoxLayout, QFileDialog, QMessageBox)
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QPalette, QColor, QFont, QIcon
 
 class RedditDownloader(QThread):
+<<<<<<< HEAD
     progress_signal = Signal(int, str)
     job_complete_signal = Signal(list)
+=======
+    progress_signal = Signal(int)
+    error_signal = Signal(str)
+    processing_signal = Signal(str)
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
 
     def __init__(self, reddit, subreddit_list, sort_by, limit, time_filter, save_path):
         super().__init__()
@@ -19,13 +29,19 @@ class RedditDownloader(QThread):
         self.time_filter = time_filter
         self.save_path = save_path
         self.is_running = True
+<<<<<<< HEAD
         self.total_downloads = 0
         self.error_subreddits = []
+=======
+        self.failed_subreddits = []
+        self.total_downloads = 0
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
 
     def run(self):
         for subreddit_name in self.subreddit_list:
             if not self.is_running:
                 break
+<<<<<<< HEAD
             try:
                 self.progress_signal.emit(self.total_downloads, f"Processing: {subreddit_name}")
                 subreddit_save_path = os.path.join(self.save_path, subreddit_name)
@@ -46,16 +62,40 @@ class RedditDownloader(QThread):
                     if not submission.is_self and 'url' in vars(submission):
                         url = submission.url
                         if url.endswith(('.jpg', '.jpeg', '.png')):
+=======
+            self.processing_signal.emit(subreddit_name)
+            subreddit_save_path = os.path.join(self.save_path, subreddit_name)
+            if not os.path.exists(subreddit_save_path):
+                os.makedirs(subreddit_save_path)
+            try:
+                subreddit = self.reddit.subreddit(subreddit_name)
+                submissions = getattr(subreddit, self.sort_by)(limit=self.limit) if self.sort_by not in ["top", "controversial"] else getattr(subreddit, self.sort_by)(limit=self.limit, time_filter=self.time_filter)
+                for submission in submissions:
+                    if not self.is_running:
+                        break
+                    if not submission.is_self and 'url' in vars(submission):
+                        url = submission.url
+                        if url.endswith(('.jpg', '.jpeg', '.png', '.gif', '.gifv', '.webm', '.mp4', '.webp')):
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
                             response = requests.get(url)
                             with open(os.path.join(subreddit_save_path, os.path.basename(url)), 'wb') as file:
                                 file.write(response.content)
                             self.total_downloads += 1
+<<<<<<< HEAD
                             self.progress_signal.emit(self.total_downloads, f"Processing: {subreddit_name}")
 
             except Exception as e:
                 self.error_subreddits.append(subreddit_name)
 
         self.job_complete_signal.emit(self.error_subreddits)
+=======
+                            self.progress_signal.emit(1)
+            except:
+                self.failed_subreddits.append(subreddit_name)
+        if self.failed_subreddits:
+            self.error_signal.emit(", ".join(self.failed_subreddits))
+        self.processing_signal.emit("Processing Complete")
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
 
     def stop(self):
         self.is_running = False
@@ -67,7 +107,64 @@ class RedditMediaDownloader(QMainWindow):
         self.setWindowIcon(QIcon("icon.png"))
         self.resize(320, 290)
 
+<<<<<<< HEAD
         main_layout = QVBoxLayout()
+=======
+        palette = QPalette()
+        palette.setColor(QPalette.Window, Qt.white)
+        palette.setColor(QPalette.WindowText, Qt.black)
+        palette.setColor(QPalette.Button, QColor(255, 165, 0))
+        palette.setColor(QPalette.ButtonText, Qt.white)
+        palette.setColor(QPalette.Highlight, QColor(255, 165, 0))
+        palette.setColor(QPalette.HighlightedText, Qt.white)
+        self.setPalette(palette)
+        
+        self.setStyleSheet("""
+            QPushButton {
+                background-color: #FF4500;
+                color: white;
+                border-radius: 7px;
+                height: 25px;
+            }
+            QPushButton:hover {
+                background-color: #FF5722;
+            }
+            QPushButton:disabled {
+                background-color: gray;
+                color: black;
+            }
+            QComboBox {
+                border-radius: 7px;
+                background-color: #FF4500;
+                color: white;
+                height: 25px;
+            }
+            QLineEdit {
+                border-radius: 7px;
+                background-color: white;
+                color: #FF4500;
+                border: 2px solid #FF4500;
+            }
+            QSlider::handle:horizontal {
+                height: 10px;
+                background: #FF4500;
+                margin: 0 -4px;
+            }
+        """)
+
+        main_layout = QVBoxLayout()
+        self.header_label = QLabel("PyRedditor", self)
+        self.header_label.setFont(QFont("Courier New", 20, QFont.Bold))
+        self.header_label.setAlignment(Qt.AlignCenter)
+        main_layout.addWidget(self.header_label, alignment=Qt.AlignCenter)
+
+        self.mini_label = QLabel("Reddit Image Scraper\n\n", self)
+        font = QFont("Verdana",7)
+        font.setItalic(True)
+        self.mini_label.setFont(font)
+        self.mini_label.setAlignment(Qt.AlignCenter)
+        main_layout.addWidget(self.mini_label, alignment=Qt.AlignCenter)
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
 
         self.load_button = QPushButton("Load Subreddits From File")
         main_layout.addWidget(self.load_button)
@@ -108,16 +205,33 @@ class RedditMediaDownloader(QMainWindow):
         main_layout.addWidget(self.stop_button)
 
         self.downloaded_label = QLabel("Downloads Saved: 0")
+<<<<<<< HEAD
         self.downloaded_label.setStyleSheet("color: green; font-weight: bold;")
         main_layout.addWidget(self.downloaded_label)
 
         self.status_label = QLabel("Status: Idle")
         main_layout.addWidget(self.status_label)
+=======
+        self.downloaded_label.setAlignment(Qt.AlignCenter)
+        main_layout.addWidget(self.downloaded_label)
+
+        # Add a stretch to push subsequent widgets to the bottom
+        main_layout.addStretch(1)
+
+        # Add the processing label after the stretch
+        self.processing_label = QLabel("Waiting to start...", self)
+        self.processing_label.setAlignment(Qt.AlignCenter)  # Center the text in the label
+        main_layout.addWidget(self.processing_label)
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
 
         central_widget = QWidget()
         central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
         self.load_button.clicked.connect(self.load_subreddits_from_file)
         self.start_button.clicked.connect(self.start_download)
         self.stop_button.clicked.connect(self.stop_download)
@@ -143,6 +257,10 @@ class RedditMediaDownloader(QMainWindow):
             QMessageBox.warning(self, 'Warning', 'Please load a subreddit list file first.')
             return
 
+<<<<<<< HEAD
+=======
+        self.downloaded_label.setText("Downloads Saved: 0")
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
         sort = self.sort_combobox.currentText()
         limit = self.limit_slider.value()
         when = self.time_combobox.currentText()
@@ -151,9 +269,18 @@ class RedditMediaDownloader(QMainWindow):
 
         self.reddit_thread = RedditDownloader(reddit, self.subreddit_list, sort, limit, when, "images")
         self.reddit_thread.progress_signal.connect(self.update_progress)
+<<<<<<< HEAD
         self.reddit_thread.job_complete_signal.connect(self.job_complete)
         self.reddit_thread.start()
 
+=======
+        self.reddit_thread.error_signal.connect(self.show_errors)
+        self.reddit_thread.processing_signal.connect(self.show_processing)
+        self.reddit_thread.finished.connect(self.job_complete)
+        self.reddit_thread.start()
+
+        self.downloaded_label.setStyleSheet("color: green; font-weight: bold;")
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
         self.start_button.setEnabled(False)
         self.stop_button.setEnabled(True)
 
@@ -162,6 +289,7 @@ class RedditMediaDownloader(QMainWindow):
             self.reddit_thread.stop()
         self.reset_ui()
 
+<<<<<<< HEAD
     def job_complete(self, error_subreddits):
         self.reset_ui()
         if error_subreddits:
@@ -171,13 +299,36 @@ class RedditMediaDownloader(QMainWindow):
         QMessageBox.information(self, 'Job Complete', f'Total images downloaded: {self.reddit_thread.total_downloads}\n{error_text}')
 
     def reset_ui(self):
+=======
+    def job_complete(self):
+        self.reset_ui()
+        summary_msg = f"Total images downloaded: {self.reddit_thread.total_downloads}"
+        if self.reddit_thread.failed_subreddits:
+            summary_msg += f"\nFailed to process the following subreddits: {', '.join(self.reddit_thread.failed_subreddits)}"
+        QMessageBox.information(self, 'Job Complete', summary_msg)
+
+    def reset_ui(self):
+        self.processing_label.setText("Processing Complete")
+        self.downloaded_label.setStyleSheet("color: black; font-weight: normal;")
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
         self.start_button.setEnabled(True)
         self.stop_button.setEnabled(False)
         self.status_label.setText("Status: Idle")
 
+<<<<<<< HEAD
     def update_progress(self, count, status_text):
         self.downloaded_label.setText(f"Downloads Saved: {count}")
         self.status_label.setText(status_text)
+=======
+    def update_progress(self, count):
+        self.downloaded_label.setText(f"Downloads Saved: {self.reddit_thread.total_downloads}")
+
+    def show_errors(self, errors):
+        self.processing_label.setText(f"Errors encountered with: {errors}")
+
+    def show_processing(self, subreddit_name):
+        self.processing_label.setText(f"Processing: {subreddit_name}")
+>>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
 
     def update_slider_value(self, value):
         self.limit_label.setText(f"Limit: {value}")
