@@ -1,8 +1,5 @@
-<<<<<<< HEAD
+
 # PyRedditor 0.4
-=======
-# PyRedditor 0.3
->>>>>>> a4bb72bba294fc4614a11789d529caf8aadaafa5
 Download images from a subreddit. You can choose how many posts to scan, filter according to time, and how to sort.
 ##
 ## Important: 
@@ -18,7 +15,6 @@ Example:
 ##    
 Images will be downloaded into "images" folder, and then with the subreddit's name. The images folder is inside the folder where the script is running.
 
-<<<<<<< HEAD
 #### Dependencies:
 1. praw
 2. requests
