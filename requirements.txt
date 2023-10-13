@@ -1,0 +1,3 @@
+praw
+pyside6
+requests
