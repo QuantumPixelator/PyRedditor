@@ -2,9 +2,9 @@ import praw
 import json
 import requests
 import os
-from PySide6.QtWidgets import (QApplication, QMainWindow, QVBoxLayout, QLabel, QLineEdit, QSlider, QComboBox, QPushButton, QWidget, QHBoxLayout, QFileDialog, QMessageBox)
+from PySide6.QtWidgets import (QApplication, QMainWindow, QVBoxLayout, QLabel, QSlider, QComboBox, QPushButton, QWidget, QHBoxLayout, QFileDialog, QMessageBox)
 from PySide6.QtCore import Qt, QThread, Signal
-from PySide6.QtGui import QPalette, QColor, QFont, QIcon
+from PySide6.QtGui import QPalette, QColor, QIcon
 
 class RedditDownloader(QThread):
     progress_signal = Signal(int, str)
