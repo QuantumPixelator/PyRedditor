@@ -45,7 +45,7 @@ class RedditDownloader(QThread):
 
                     if not submission.is_self and 'url' in vars(submission):
                         url = submission.url
-                        if url.endswith(('.jpg', '.jpeg', '.png')):
+                        if url.endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif', '.tiff', '.tif', '.webp', '.avif', '.svg', '.gifv')):
                             response = requests.get(url)
                             with open(os.path.join(subreddit_save_path, os.path.basename(url)), 'wb') as file:
                                 file.write(response.content)
